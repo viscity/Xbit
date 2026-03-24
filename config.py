@@ -89,23 +89,22 @@ autoclean = []
 confirmer = {}
 file_cache: dict[str, float] = {}
 
-START_IMG_URL = ["https://files.catbox.moe/bdl8ow.jpg",
-                 "https://files.catbox.moe/aqh8vj.jpg",
-                 "https://files.catbox.moe/bdl8ow.jpg"]
+START_IMG_URL = ["https://files.catbox.moe/lt9dt0.jpg",
+                 "https://files.catbox.moe/4ui3jm.jpg"]
     
 PING_IMG_URL = getenv(
     "PING_IMG_URL", "https://files.catbox.moe/iorcd7.jpg"
 )
-PLAYLIST_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
-STATS_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
-TELEGRAM_AUDIO_URL = "https://files.catbox.moe/bdl8ow.jpg"
-TELEGRAM_VIDEO_URL = "https://files.catbox.moe/bdl8ow.jpg"
-STREAM_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
-SOUNCLOUD_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
-YOUTUBE_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
-SPOTIFY_ARTIST_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
-SPOTIFY_ALBUM_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
-SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/bdl8ow.jpg"
+PLAYLIST_IMG_URL = "https://files.catbox.moe/lt9dt0.jpg"
+STATS_IMG_URL = "https://files.catbox.moe/lt9dt0.jpg"
+TELEGRAM_AUDIO_URL = "https://files.catbox.moe/lt9dt0.jpg"
+TELEGRAM_VIDEO_URL = "https://files.catbox.moe/lt9dt0.jpg"
+STREAM_IMG_URL = "https://files.catbox.moe/4ui3jm.jpg"
+SOUNCLOUD_IMG_URL = "https://files.catbox.moe/4ui3jm.jpg"
+YOUTUBE_IMG_URL = "https://files.catbox.moe/4ui3jm.jpg"
+SPOTIFY_ARTIST_IMG_URL = "https://files.catbox.moe/4ui3jm.jpg"
+SPOTIFY_ALBUM_IMG_URL = "https://files.catbox.moe/4ui3jm.jpg"
+SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/4ui3jm.jpg"
 
 
 
