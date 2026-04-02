@@ -227,8 +227,8 @@ class YouTubeAPI:
             return 1, stdout.decode().split("\n")[0]
         else:
             return 0, stderr.decode()
-
-    async def playlist(self, link, limit, user_id, videoid: Union[bool, str] = None):
+            
+            async def playlist(self, link, limit, user_id, videoid: Union[bool, str] = None):
         if videoid:
             link = self.listbase + link
         if "&" in link:
@@ -237,28 +237,29 @@ class YouTubeAPI:
             link = link.split("?si=")[0]
         elif "&si=" in link:
             link = link.split("&si=")[0]
-        playlist = await shell_cmd(
-            f"yt-dlp -i --get-id --flat-playlist --cookies {cookie_txt_file()} --playlist-end {limit} --skip-download {link}"
-        )
-        try:
-            result = playlist.split("\n")
-            for key in result:
-                if key == "":
-                    result.remove(key)
-        except:
-            result = []
-        return result
 
-    async def track(self, link: str, videoid: Union[bool, str] = None):
-        if videoid:
-            link = self.base + link
-        if "&" in link:
-            link = link.split("&")[0]
-        if "?si=" in link:
-            link = link.split("?si=")[0]
-        elif "&si=" in link:
-            link = link.split("&si=")[0]
-
+        playlist = await Playlist.get(link)
+        if playlist:
+            videos = []
+            for video in playlist["videos"][:limit]:
+                try:
+                    duration = video.get("duration")
+                    if duration:
+                        duration_sec = int(time_to_seconds(duration))
+                    else:
+                        duration_sec = 0
+                    videos.append({
+                        "vidid": video["id"],
+                        "title": video.get("title", "Unknown"),
+                        "duration_min": duration,
+                        "duration_sec": duration_sec,
+                        "thumbnail": video.get("thumbnails", [{}])[0].get("url", "").split("?")[0] if video.get("thumbnails") else "",
+                    })
+                except:
+                    continue
+            return videos
+        return None
+                   
         results = VideosSearch(link, limit=1)
         for result in (await results.next())["result"]:
             title = result["title"]
