@@ -480,7 +480,7 @@ class YouTubeAPI:
                     return None
                 else:
                     logger.error("Could not fetch Backend \nPlease contact API provider.")
-                    return None of
+                    return None
                     
             except requests.exceptions.RequestException as e:
                 logger.error(f"Network error while fetching video info: {str(e)}")
