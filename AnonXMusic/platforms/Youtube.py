@@ -13,8 +13,7 @@ from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from ytSearch import VideosSearch, CustomSearch
-import base64
+from ytSearch import VideosSearch, Playlist
 from AnonXMusic import LOGGER
 from AnonXMusic.utils.database import is_on_off
 from AnonXMusic.utils.formatters import time_to_seconds
@@ -35,56 +34,6 @@ def cookie_txt_file():
         return f"""cookies/{str(cookie_txt_file).split("/")[-1]}"""
     except:
         return None
-
-
-async def check_file_size(link):
-    async def get_format_info(link):
-        proc = await asyncio.create_subprocess_exec(
-            "yt-dlp",
-            "--cookies", cookie_txt_file(),
-            "-J",
-            link,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        stdout, stderr = await proc.communicate()
-        if proc.returncode != 0:
-            print(f'Error:\n{stderr.decode()}')
-            return None
-        return json.loads(stdout.decode())
-
-    def parse_size(formats):
-        total_size = 0
-        for format in formats:
-            if 'filesize' in format:
-                total_size += format['filesize']
-        return total_size
-
-    info = await get_format_info(link)
-    if info is None:
-        return None
-    
-    formats = info.get('formats', [])
-    if not formats:
-        print("No formats found.")
-        return None
-    
-    total_size = parse_size(formats)
-    return total_size
-
-async def shell_cmd(cmd):
-    proc = await asyncio.create_subprocess_shell(
-        cmd,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    out, errorz = await proc.communicate()
-    if errorz:
-        if "unavailable videos are hidden" in (errorz.decode("utf-8")).lower():
-            return out.decode("utf-8")
-        else:
-            return errorz.decode("utf-8")
-    return out.decode("utf-8")
 
 
 class YouTubeAPI:
@@ -214,7 +163,6 @@ class YouTubeAPI:
 
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
-            "--cookies",cookie_txt_file(),
             "-g",
             "-f",
             "best[height<=?720][width<=?1280]",
@@ -227,8 +175,8 @@ class YouTubeAPI:
             return 1, stdout.decode().split("\n")[0]
         else:
             return 0, stderr.decode()
-            
-            async def playlist(self, link, limit, user_id, videoid: Union[bool, str] = None):
+
+    async def playlist(self, link, limit, user_id, videoid: Union[bool, str] = None):
         if videoid:
             link = self.listbase + link
         if "&" in link:
@@ -259,7 +207,17 @@ class YouTubeAPI:
                     continue
             return videos
         return None
-                   
+
+    async def track(self, link: str, videoid: Union[bool, str] = None):
+        if videoid:
+            link = self.base + link
+        if "&" in link:
+            link = link.split("&")[0]
+        if "?si=" in link:
+            link = link.split("?si=")[0]
+        elif "&si=" in link:
+            link = link.split("&si=")[0]
+
         results = VideosSearch(link, limit=1)
         for result in (await results.next())["result"]:
             title = result["title"]
@@ -285,7 +243,7 @@ class YouTubeAPI:
             link = link.split("?si=")[0]
         elif "&si=" in link:
             link = link.split("&si=")[0]
-        ytdl_opts = {"quiet": True, "cookiefile" : cookie_txt_file()}
+        ytdl_opts = {"quiet": True}
         ydl = yt_dlp.YoutubeDL(ytdl_opts)
         with ydl:
             formats_available = []
@@ -522,7 +480,7 @@ class YouTubeAPI:
                     return None
                 else:
                     logger.error("Could not fetch Backend \nPlease contact API provider.")
-                    return None
+                    return None of
                     
             except requests.exceptions.RequestException as e:
                 logger.error(f"Network error while fetching video info: {str(e)}")
